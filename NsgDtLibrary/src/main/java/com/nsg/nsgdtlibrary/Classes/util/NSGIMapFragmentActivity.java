@@ -731,7 +731,7 @@ import static java.lang.Math.sin;
                                                             // polylineOptions.add(OldGPSPosition);
                                                             polylineOptions.addAll(currentLocationList);
                                                             Polyline polyline = mMap.addPolyline(polylineOptions);
-                                                            polylineOptions.color(Color.RED).width(30);
+                                                            polylineOptions.color(Color.CYAN).width(30);
                                                             mMap.addPolyline(polylineOptions);
                                                             polyline.setJointType(JointType.ROUND);
                                                         }
