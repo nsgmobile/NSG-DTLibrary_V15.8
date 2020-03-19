@@ -39,7 +39,7 @@ public class NSGApiActivity extends FragmentActivity implements NSGIMapFragmentA
             "17.455259 78.554962,\n" +
             "17.455504 78.554935,\n" +
             "17.455702 78.555192";
-/*
+
    String SourcePosition="78.570759 17.473453";
     String DestinationPosition="78.555174 17.455362";
     private String  routeData="{\n" +
@@ -280,7 +280,7 @@ public class NSGApiActivity extends FragmentActivity implements NSGIMapFragmentA
             "    ]\n" +
             "}";
 
- */
+
     /*
     private String GeoFenceCordinates="17.455565 78.555251,\n" +
             "17.455483 78.555368,\n" +
@@ -3165,13 +3165,15 @@ public class NSGApiActivity extends FragmentActivity implements NSGIMapFragmentA
 
      */
 
-
+/*
      private String SourcePosition = "55.33279 25.26886";
      private String DestinationPosition = "55.3327 25.27078";
    // 25.26886,55.33279   25.27078,55.3327
     String routeData="{\"$id\": \"1\",\"Message\": \"Sucess\",\"Status\": \"Success\",\"TotalDistance\": 0.04324998409,\"Route\": [{\"$id\": \"114\",\"EdgeNo\": \"1817\",\"GeometryText\": \"-\",\"Geometry\": {\n"+
           "\"$id\": \"115\",\"type\": \"LineString\",\"coordinates\": [[55.33279,25.26886],[55.33314,25.26797],[55.33249,25.26771 ],[55.33196,25.26755],[55.33147,25.26733 ],[55.33089,25.26717],[55.33063,25.2672],[55.33064,25.26776],[55.33072,25.26849],[55.33071,25.26907],[55.33064,25.26961],[55.33066,25.27013 ],[55.33098,25.2704],[55.33156,25.27057],[55.33225,25.27069],[55.3327,25.27078]]}}]}";
+*/
 /*
+
     String SourcePosition="78.571275 17.473804";
     String DestinationPosition="78.564651 17.468051";
     private String  routeData="{\"$id\":\"1\",\"Message\":\"Sucess\",\"Status\":\"Success\",\"TotalDistance\":0.00884315523,\"Route\":[{\"$id\":\"2\",\"EdgeNo\":\"102\",\"GeometryText\":\"-\",\"Geometry\":{\"$id\":\"3\",\"type\":\"LineString\",\"coordinates\":[[78.571275,17.473804],[78.571132,17.473587],[78.570936,17.473375],[78.570724,17.473250],[78.570370,17.473004],[78.569989,17.472763],[78.569373,17.472311],[78.568690,17.471816],[78.568026,17.471415],[78.566716,17.470434],[78.565718,17.469347],[78.564651,17.468051]]}}]}";
