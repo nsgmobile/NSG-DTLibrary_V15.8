@@ -593,9 +593,10 @@ import static java.lang.Math.sin;
                                     isContinue = true;
                                     stringBuilder = new StringBuilder();
                                     currentGpsPosition=getLocation();
-                                   // if(currentGpsPosition!=null && !currentGpsPosition.toString().startsWith("lat/lng: (17.")) {
+                                    if(currentGpsPosition!=null) {
                                         Log.v("APP DATA ", "START NAVI CURRENT GPS POSITION ----" + currentGpsPosition);
-                                   // }
+                                        drawMarkerWithCircle(currentGpsPosition,routeDeviationDistance);
+                                    }
                                     // Navigation code starts from here
                                     LatLng OldNearestPosition = null;
                                     if (isRouteDeviated == false) {
@@ -723,7 +724,7 @@ import static java.lang.Math.sin;
                                                         } else {
 
                                                         }
-                                                        /*
+
                                                         if(isContinuoslyOutOfTrack==true){
                                                             currentLocationList.add(currentGpsPosition);
                                                             PolylineOptions polylineOptions = new PolylineOptions();
@@ -735,7 +736,6 @@ import static java.lang.Math.sin;
                                                             polyline.setJointType(JointType.ROUND);
                                                         }
 
-                                                         */
                                                     }
                                                 }
 
@@ -1327,7 +1327,7 @@ import static java.lang.Math.sin;
                                      drawMarkerWithCircle(RouteDeviation_RouteSt_point,40);
                                      double rd_ditance=distFrom(RouteDeviation_RouteSt_point.latitude,RouteDeviation_RouteSt_point.longitude,markerPosition.latitude,markerPosition.longitude);
                                      Log.e("Route Deviation", "RouteDeviation_RouteSt_point Distance Buffer" + rd_ditance);
-                                      if(rd_ditance<40) {
+                                      if(rd_ditance<60) {
                                           // if deviation happens with in 40 mts distance it will identify Route Deviation
 
                                           if (consRouteDeviatedDistList != null && consRouteDeviatedDistList.size() > 3) {
