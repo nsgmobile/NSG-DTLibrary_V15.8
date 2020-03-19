@@ -1291,7 +1291,7 @@ import static java.lang.Math.sin;
 
                                  if (commonPoints.size() == 0) {
 
-                                 } else if (commonPoints.size() > 0 && new_unCommonPoints.size() >5 ) {
+                                 } else if (commonPoints.size() > 0 && new_unCommonPoints.size() >4 ) {
                                      //  Log.e("Route Deviation", " IS ROUTE VERIFY  ###### " + " Route COINSIDENCE");
                                      if (mPositionMarker != null && mPositionMarker.isVisible() == true) {
                                          PolylineOptions polylineOptions = new PolylineOptions();
