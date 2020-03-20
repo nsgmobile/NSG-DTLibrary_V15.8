@@ -30,6 +30,13 @@ public class NSGApiActivity extends FragmentActivity implements NSGIMapFragmentA
     private String charlsisNumber;
     private  Button Start,Stop;
     private String jobId="1",routeId;
+    private String GeoFenceCordinates="17.455565 78.555251,\n" +
+            "17.455483 78.555368,\n" +
+            "17.455285 78.555436,\n" +
+            "17.455173 78.555183,\n" +
+            "17.455259 78.554962,\n" +
+            "17.455504 78.554935,\n" +
+            "17.455702 78.555192";
 
 /*
     private String GeoFenceCordinates="17.455565 78.555251,\n" +
@@ -2934,7 +2941,7 @@ public class NSGApiActivity extends FragmentActivity implements NSGIMapFragmentA
     */
 
 
-
+/*
 
     private String SourcePosition = "55.067291 24.978782";
     private String DestinationPosition = "55.067205 24.979878";
@@ -2972,7 +2979,7 @@ public class NSGApiActivity extends FragmentActivity implements NSGIMapFragmentA
             "[55.066794299000037,24.98024651500009],[55.066816470000049,24.980249936000064],[55.066838951000079,24.980250405000049],\n" +
             "[55.066861270000061,24.980247913000085]]}},{\"$id\":\"6\",\"EdgeNo\":\"443\",\"GeometryText\":\"-\",\"Geometry\":\n" +
             "{\"$id\":\"7\",\"type\":\"LineString\",\"coordinates\":[[55.066861270000061,24.980247913000085],[55.0672260238388,24.9799000715094]]}}]}";
-
+*/
     /*
 
     String SourcePosition="78.570799 17.473538";
@@ -3166,7 +3173,7 @@ public class NSGApiActivity extends FragmentActivity implements NSGIMapFragmentA
 
      */
 
-/*
+
      private String SourcePosition = "55.33279 25.26886";
      private String DestinationPosition = "55.33459538 25.26849246";
    // 25.26886,55.33279   25.27078,55.3327
@@ -3378,9 +3385,9 @@ public class NSGApiActivity extends FragmentActivity implements NSGIMapFragmentA
            "        }\n" +
            "    ]\n" +
            "}";
-           */
-    /*
 
+
+/*
     String SourcePosition="78.571275 17.473804";
     String DestinationPosition="78.564651 17.468051";
     private String  routeData="{\"$id\":\"1\",\"Message\":\"Sucess\",\"Status\":\"Success\",\"TotalDistance\":0.00884315523,\"Route\":[{\"$id\":\"2\",\"EdgeNo\":\"102\",\"GeometryText\":\"-\",\"Geometry\":{\"$id\":\"3\",\"type\":\"LineString\",\"coordinates\":[[78.571275,17.473804],[78.571132,17.473587],[78.570936,17.473375],[78.570724,17.473250],[78.570370,17.473004],[78.569989,17.472763],[78.569373,17.472311],[78.568690,17.471816],[78.568026,17.471415],[78.566716,17.470434],[78.565718,17.469347],[78.564651,17.468051]]}}]}";
