@@ -190,7 +190,7 @@ import static java.lang.Math.sin;
         private String currentGpsPoint;
         private Polyline line;
         private List polyLines;
-        private Circle mCircle;
+        private Circle mCircle = null;
         private List<LatLng>lastGPSPosition;
         private LatLng nearestPositionPoint;
         Bitmap mMarkerIcon;
@@ -639,37 +639,53 @@ import static java.lang.Math.sin;
                                     currentGpsPosition=getLocation();
 
                                     //Draw circle at current GPS with buffer configured value
-                                    if(currentGpsPosition!=null) {
-                                        Log.v("APP DATA ", "START NAVI CURRENT GPS POSITION ----" + currentGpsPosition);
+                                    //ACTION - CHANGES TO BE DONE
 
+                                    if(mCircle!=null && currentGpsPosition!=null) {
+                                        Log.v("APP DATA ", "START NAVI CURRENT GPS POSITION ----" + currentGpsPosition);
                                         //Draw Circle first time and update position next time
-                                        if (isFirstTime == true){
-                                            drawMarkerWithCircle(currentGpsPosition,routeDeviationDistance);
-                                            isFirstTime = false;
-                                        }else{
-                                            //Update Circle position
-                                            mCircle.setCenter(currentGpsPosition);
-                                        }
+                                         drawMarkerWithCircle(currentGpsPosition, routeDeviationDistance);
                                     }
 
-
-
                                     // Navigation code starts from here
+
+                                    //OldNearestPosition means previous point on road
                                     LatLng OldNearestPosition = null;
+
                                     if (isRouteDeviated == false) {
+
                                         if (OldGPSPosition != null) {
+
+                                            //Get the distance between
                                             double distance = distFrom(OldGPSPosition.latitude, OldGPSPosition.longitude, currentGpsPosition.latitude, currentGpsPosition.longitude);
                                           //  Log.e("distance", "distance" + distance);
+
+                                            //if the distance between previous GPS position and current GPS position is more than 40 meters
+                                            //DONT DO ANYTHING - JUST SKIP THE POINT
+                                            //WHY 40 METERS? - ACTION - CHECK
                                             if (distance > 40) {
 
                                             } else {
+                                                //nPosition ---- BY DEFAULT NULL
                                                 OldNearestPosition = nPosition;
                                                // Log.e("CurrentGpsPoint", " OLD Nearest GpsPoint " + OldNearestPosition);
+
+                                                //nPosition means nearest point on road
                                                 nPosition = GetNearestPointOnRoadFromGPS(OldGPSPosition, currentGpsPosition);
                                                // Log.e("CurrentGpsPoint", " Nearest GpsPoint" + nPosition);
+
+
+                                                //Get the perpendicular distance from GPS to Road
                                                 double distance_movement = distFrom(nPosition.latitude, nPosition.longitude, currentGpsPosition.latitude, currentGpsPosition.longitude);
-                                              //  Log.e("Distance_movement", " Distance_movement" + distance_movement);
+                                                //Log.e("Distance_movement", " Distance_movement " + rounded_value);
+                                                //Toast.setGravity(Gravity.TOP, 0, 200);
+
+                                                //If the perpendicular distance between current GPS and road is less than 40 meters
+                                                //change the position of marker to point on road
+                                                //ACTION - CHANGE THIS TO BUFFER DISTANCE
                                                 if (distance_movement <40) {
+
+                                                    //If there is no marker - create marker
                                                     if (mPositionMarker == null && currentGpsPosition!=null) {
                                                         mPositionMarker = mMap.addMarker(new MarkerOptions()
                                                                 .position(SourceNode)
@@ -677,8 +693,9 @@ import static java.lang.Math.sin;
                                                                 .anchor(0.5f, 0.5f)
                                                                 .flat(true)
                                                                 .icon(bitmapDescriptorFromVector(getContext(), R.drawable.gps_transperent_98)));
-                                                    } else {
+                                                    } else { //update marker position
                                                         Log.e("CurrentGpsPoint", " currentGpsPosition ------ " + currentGpsPosition);
+
                                                         if (OldNearestPosition != null) {
                                                             if (islocationControlEnabled == false) {
                                                                 Log.e("CurrentGpsPoint", " curren FRM START NAVI ------ " + currentGpsPosition);
@@ -703,7 +720,9 @@ import static java.lang.Math.sin;
                                                                 double returnedDistance1 = 0.0;
                                                                 double returnedDistance2 = 0.0;
                                                                 double returnedDistance3 = 0.0;
-                                                                if (consDistList != null) {
+
+                                                                //If consective perpendicular distances are more than 3
+                                                                if (consDistList != null && consDistList.size() > 3) {
                                                                     returnedDistance1 = consDistList.get(consDistList.size() - 1);
                                                                    // Log.e("APP DATA ", " Distance 1 ----" + returnedDistance1);
                                                                     returnedDistance2 = consDistList.get(consDistList.size() - 2);
@@ -711,16 +730,20 @@ import static java.lang.Math.sin;
                                                                     returnedDistance3 = consDistList.get(consDistList.size() - 3);
                                                                    // Log.e("APP DATA ", " Distance 3 ----" + returnedDistance3);
                                                                 }
-                                                                if (returnedDistance1 > routeDeviationDistance) {
-                                                                    if (returnedDistance2 > routeDeviationDistance) {
-                                                                        if (returnedDistance3 > routeDeviationDistance) {
+
+                                                                //If 3-consective perpendicular distances are more than buffer distance
+                                                                if (returnedDistance1 > routeDeviationDistance && returnedDistance2 > routeDeviationDistance && returnedDistance3 > routeDeviationDistance) {
+                                                                             Log.e("APP DATA ", " Distance 1 ----" + returnedDistance1);
+                                                                             Log.e("APP DATA ", " Distance 2 ----" + returnedDistance2);
+                                                                             Log.e("APP DATA ", " Distance 3 ----" + returnedDistance3);
+                                                                             Log.e("APP DATA ", " currentGpsPosition ----" + currentGpsPosition);
+
                                                                             verifyRouteDeviation(OldGPSPosition, currentGpsPosition, DestinationNode, routeDeviationDistance, null);
-                                                                            //   verifyRouteDeviationTask(OldGPSPosition, currentGpsPosition, DestinationNode, routeDeviationDistance, null);
-                                                                        }
-                                                                    }
+
                                                                 } else {
 
                                                                 }
+
                                                                 AlertDestination(currentGpsPosition);
                                                                 if (bearing > 0.0) {
                                                                     CameraPosition currentPlace = new CameraPosition.Builder()
@@ -739,7 +762,8 @@ import static java.lang.Math.sin;
                                                         }
                                                     }
 
-                                                }else{
+                                                }
+                                              /*  else{ //if the perpendicular distane is more than 40
                                                     isContinuoslyOutOfTrack=true;
                                                     if (mPositionMarker == null) {
 
@@ -795,6 +819,7 @@ import static java.lang.Math.sin;
 
                                                     }
                                                 }
+                                                */
 
                                             }
 
@@ -804,7 +829,7 @@ import static java.lang.Math.sin;
                                       //  if(!currentGpsPosition.toString().equals("lat/lng: (17.")) {
                                             MoveWithGpsPointInRouteDeviatedPoints(currentGpsPosition);
                                       //  }
-                                    }
+                                    } //end of navigation
                                     //Navigation code ends here
                                     handler.postDelayed(this, delay);
                                 }
