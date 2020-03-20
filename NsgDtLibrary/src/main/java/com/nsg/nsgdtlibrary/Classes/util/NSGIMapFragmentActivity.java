@@ -841,7 +841,6 @@ import static java.lang.Math.sin;
                                             if (distance > 40) {
 
                                             } else {
-
                                                 //  if(!currentGpsPosition.toString().equals("lat/lng: (17.")) {
                                                 MoveWithGpsPointInRouteDeviatedPoints(currentGpsPosition);
                                             }
