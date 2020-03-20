@@ -717,6 +717,7 @@ import static java.lang.Math.sin;
                                                                 double offsetDistance = SphericalUtil.computeDistanceBetween(centerLoc, offsetNewLoc);
                                                                 LatLng shadowTgt = SphericalUtil.computeOffset(nPosition, offsetDistance, bearing);
                                                                 caclulateETA(TotalDistanceInMTS, SourceNode, currentGpsPosition, DestinationNode);
+                                                              /*
                                                                 double returnedDistance1 = 0.0;
                                                                 double returnedDistance2 = 0.0;
                                                                 double returnedDistance3 = 0.0;
@@ -743,6 +744,8 @@ import static java.lang.Math.sin;
                                                                 } else {
 
                                                                 }
+                                                                
+                                                               */
 
                                                                 AlertDestination(currentGpsPosition);
                                                                 if (bearing > 0.0) {
