@@ -744,7 +744,7 @@ import static java.lang.Math.sin;
                                                                 } else {
 
                                                                 }
-                                                                
+
                                                                */
 
                                                                 AlertDestination(currentGpsPosition);
@@ -832,9 +832,20 @@ import static java.lang.Math.sin;
 
                                          }
                                     } else {
+                                        if(OldGPSPosition!=null && currentGpsPosition!=null ) {
+                                            double distance = distFrom(OldGPSPosition.latitude, OldGPSPosition.longitude, currentGpsPosition.latitude, currentGpsPosition.longitude);
+                                            //  Log.e("distance", "distance" + distance);
+                                            //if the distance between previous GPS position and current GPS position is more than 40 meters
+                                            //DONT DO ANYTHING - JUST SKIP THE POINT
+                                            //WHY 40 METERS? - ACTION - CHECK
+                                            if (distance > 40) {
 
-                                      //  if(!currentGpsPosition.toString().equals("lat/lng: (17.")) {
-                                            MoveWithGpsPointInRouteDeviatedPoints(currentGpsPosition);
+                                            } else {
+
+                                                //  if(!currentGpsPosition.toString().equals("lat/lng: (17.")) {
+                                                MoveWithGpsPointInRouteDeviatedPoints(currentGpsPosition);
+                                            }
+                                        }
                                       //  }
                                     } //end of navigation
                                     //Navigation code ends here
