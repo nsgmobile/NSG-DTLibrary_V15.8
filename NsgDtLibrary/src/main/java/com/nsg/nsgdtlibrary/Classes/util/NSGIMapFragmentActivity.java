@@ -738,7 +738,7 @@ import static java.lang.Math.sin;
                                                                              Log.e("APP DATA ", " Distance 3 ----" + returnedDistance3);
                                                                              Log.e("APP DATA ", " currentGpsPosition ----" + currentGpsPosition);
 
-                                                                            verifyRouteDeviation(OldGPSPosition, currentGpsPosition, DestinationNode, routeDeviationDistance, null);
+                                                                          //  verifyRouteDeviation(OldGPSPosition, currentGpsPosition, DestinationNode, routeDeviationDistance, null);
 
                                                                 } else {
 
@@ -763,7 +763,7 @@ import static java.lang.Math.sin;
                                                     }
 
                                                 }
-                                              /*  else{ //if the perpendicular distane is more than 40
+                                               else{ //if the perpendicular distane is more than 40
                                                     isContinuoslyOutOfTrack=true;
                                                     if (mPositionMarker == null) {
 
@@ -795,18 +795,20 @@ import static java.lang.Math.sin;
                                                             returnedDistance3 = consDistList.get(consDistList.size() - 3);
                                                            // Log.e("APP DATA ", " Distance 3 ----" + returnedDistance3);
                                                         }
-                                                        if (returnedDistance1 > routeDeviationDistance) {
-                                                            if (returnedDistance2 > routeDeviationDistance) {
-                                                                if (returnedDistance3 > routeDeviationDistance) {
-                                                                    verifyRouteDeviation(OldGPSPosition, currentGpsPosition, DestinationNode, routeDeviationDistance, null);
 
-                                                                }
-                                                            }
+                                                        if (returnedDistance1 > routeDeviationDistance && returnedDistance2 > routeDeviationDistance && returnedDistance3 > routeDeviationDistance) {
+                                                                 Log.e("APP DATA ", " Distance 1 ----" + returnedDistance1);
+                                                                 Log.e("APP DATA ", " Distance 2 ----" + returnedDistance2);
+                                                                 Log.e("APP DATA ", " Distance 3 ----" + returnedDistance3);
+                                                                 Log.e("APP DATA ", " currentGpsPosition ----" + currentGpsPosition);
+                                                                 verifyRouteDeviation(OldGPSPosition, currentGpsPosition, DestinationNode, routeDeviationDistance, null);
+
+
                                                         } else {
 
                                                         }
 
-                                                        if(isContinuoslyOutOfTrack==true){
+                                                     /*   if(isContinuoslyOutOfTrack==true){
                                                             currentLocationList.add(currentGpsPosition);
                                                             PolylineOptions polylineOptions = new PolylineOptions();
                                                             // polylineOptions.add(OldGPSPosition);
@@ -817,9 +819,11 @@ import static java.lang.Math.sin;
                                                             polyline.setJointType(JointType.ROUND);
                                                         }
 
+                                                      */
+
                                                     }
                                                 }
-                                                */
+
 
                                             }
 
