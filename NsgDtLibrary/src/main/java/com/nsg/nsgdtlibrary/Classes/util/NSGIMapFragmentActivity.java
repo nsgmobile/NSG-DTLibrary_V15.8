@@ -254,6 +254,11 @@ import static java.lang.Math.sin;
         private String GeoFenceCordinates;
         List <LatLng> commonPoints;
         List <LatLng> new_unCommonPoints;
+
+        //Surya
+        private boolean isFirstTime = true;
+
+        //
      List<Double> consDistList=new ArrayList<>();
      List<Double> consRouteDeviatedDistList=new ArrayList<>();
      List<LatLng> DestinationGeoFenceCordinatesList;
@@ -538,6 +543,8 @@ import static java.lang.Math.sin;
                 }
             }
         }
+
+        //Main method to start the navigation
         public int startNavigation() {
             /*
                 Starts Navigation HERE
@@ -547,13 +554,25 @@ import static java.lang.Math.sin;
              */
             islocationControlEnabled=false;
             Log.v("APP DATA ", "islocationControlEnabled START BUTTON GPS POSITION ----" + OldGPSPosition);
+
+
             if (SourceNode != null && DestinationNode != null ) {
+
+                //Construct Point based on main app passed Lat/Long
                 nearestPointValuesList = new ArrayList<LatLng>();
                 nearestPointValuesList.add(new LatLng(sourceLat, sourceLng));
+
+                //Construct Point based on main app passed Lat/Long
                 OldNearestGpsList = new ArrayList<>();
                 OldNearestGpsList.add(new LatLng(sourceLat, sourceLng));
+
+
+
                 try {
+
                     if (mMap != null && isMapLoaded == true && isNavigationStarted == false) {
+
+                        //To enable Direction text for every 5000ms
                         if (isTimerStarted = true) {
                             myTimer.schedule(new TimerTask() {
                                 @Override
@@ -577,7 +596,9 @@ import static java.lang.Math.sin;
                                 }
 
                             }, 0, 5000);
-                        }
+                        } //end of Timer if
+
+
                         mMap.setMyLocationEnabled(true);
                         mMap.setBuildingsEnabled(true);
                         mMap.getUiSettings().setZoomControlsEnabled(true);
@@ -589,11 +610,18 @@ import static java.lang.Math.sin;
                         mMap.getUiSettings().setTiltGesturesEnabled(true);
                         mMap.getUiSettings().setRotateGesturesEnabled(true);
                         mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+                        //BY DEFAULT true
                         isNavigationStarted = true;
+
+
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                             isTimerStarted = true;
                              Handler handler = new Handler();
+
+                             //Get Location for every 1000 ms
                              int delay = 1000 *1; //milliseconds
+
                              handler.postDelayed(new Runnable() {
                                 public void run() {
                                     double returnedDistance_ref=0.0;
@@ -604,14 +632,28 @@ import static java.lang.Math.sin;
                                         returnedDistance_ref = verifyDeviationCalculateDistance(OldGPSPosition, currentGpsPosition);
                                        // Log.e("APP DATA ", " Distance1 ----" + returnedDistance_ref);
                                     }
+
                                     consDistList.add(returnedDistance_ref);
                                     isContinue = true;
                                     stringBuilder = new StringBuilder();
                                     currentGpsPosition=getLocation();
+
+                                    //Draw circle at current GPS with buffer configured value
                                     if(currentGpsPosition!=null) {
                                         Log.v("APP DATA ", "START NAVI CURRENT GPS POSITION ----" + currentGpsPosition);
-                                        drawMarkerWithCircle(currentGpsPosition,routeDeviationDistance);
+
+                                        //Draw Circle first time and update position next time
+                                        if (isFirstTime == true){
+                                            drawMarkerWithCircle(currentGpsPosition,routeDeviationDistance);
+                                            isFirstTime = false;
+                                        }else{
+                                            //Update Circle position
+                                            mCircle.setCenter(currentGpsPosition);
+                                        }
                                     }
+
+
+
                                     // Navigation code starts from here
                                     LatLng OldNearestPosition = null;
                                     if (isRouteDeviated == false) {
@@ -769,7 +811,7 @@ import static java.lang.Math.sin;
                             }, delay);
                             // }
 
-                        }
+                        } //end of Build version check
                     }
 
                     return 1;
