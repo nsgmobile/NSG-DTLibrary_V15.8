@@ -641,7 +641,7 @@ import static java.lang.Math.sin;
                                     //Draw circle at current GPS with buffer configured value
                                     //ACTION - CHANGES TO BE DONE
 
-                                    if(mCircle!=null && currentGpsPosition!=null) {
+                                    if(currentGpsPosition!=null) {
                                         Log.v("APP DATA ", "START NAVI CURRENT GPS POSITION ----" + currentGpsPosition);
                                         //Draw Circle first time and update position next time
                                          drawMarkerWithCircle(currentGpsPosition, routeDeviationDistance);
@@ -683,7 +683,7 @@ import static java.lang.Math.sin;
                                                 //If the perpendicular distance between current GPS and road is less than 40 meters
                                                 //change the position of marker to point on road
                                                 //ACTION - CHANGE THIS TO BUFFER DISTANCE
-                                                if (distance_movement <40) {
+                                                if (distance_movement <40) { //Follow route
 
                                                     //If there is no marker - create marker
                                                     if (mPositionMarker == null && currentGpsPosition!=null) {
@@ -694,13 +694,17 @@ import static java.lang.Math.sin;
                                                                 .flat(true)
                                                                 .icon(bitmapDescriptorFromVector(getContext(), R.drawable.gps_transperent_98)));
                                                     } else { //update marker position
-                                                        Log.e("CurrentGpsPoint", " currentGpsPosition ------ " + currentGpsPosition);
+                                                       // Log.e("CurrentGpsPoint", " currentGpsPosition ------ " + currentGpsPosition);
 
                                                         if (OldNearestPosition != null) {
                                                             if (islocationControlEnabled == false) {
                                                                 Log.e("CurrentGpsPoint", " curren FRM START NAVI ------ " + currentGpsPosition);
                                                                // Log.e("CurrentGpsPoint", " Old  FRM START NAVI ------ " + OldNearestPosition);
-                                                               // Log.e("CurrentGpsPoint", " islocationControlEnabled FLAG------ " + islocationControlEnabled);
+                                                                Log.e("CurrentGpsPoint", " CGPS " + currentGpsPosition);
+                                                                Log.e("CurrentGpsPoint", " per.CGPS " + nPosition);
+
+
+                                                                //moving the marker position from old point on road to new point on road in 1000ms
                                                                 animateCarMove(mPositionMarker, OldNearestPosition, nPosition, 1000);
                                                                 float bearing = (float) bearingBetweenLocations(OldNearestPosition, nPosition);
                                                                // Log.e("BEARING", "BEARING @@@@@@@ " + bearing);
@@ -716,38 +720,15 @@ import static java.lang.Math.sin;
                                                                 LatLng offsetNewLoc = p.fromScreenLocation(offset);
                                                                 double offsetDistance = SphericalUtil.computeDistanceBetween(centerLoc, offsetNewLoc);
                                                                 LatLng shadowTgt = SphericalUtil.computeOffset(nPosition, offsetDistance, bearing);
+
+                                                                //ETA Calculation
                                                                 caclulateETA(TotalDistanceInMTS, SourceNode, currentGpsPosition, DestinationNode);
-                                                              /*
-                                                                double returnedDistance1 = 0.0;
-                                                                double returnedDistance2 = 0.0;
-                                                                double returnedDistance3 = 0.0;
 
-                                                                //If consective perpendicular distances are more than 3
-                                                                if (consDistList != null && consDistList.size() > 3) {
-                                                                    returnedDistance1 = consDistList.get(consDistList.size() - 1);
-                                                                   // Log.e("APP DATA ", " Distance 1 ----" + returnedDistance1);
-                                                                    returnedDistance2 = consDistList.get(consDistList.size() - 2);
-                                                                  //  Log.e("APP DATA ", " Distance 2 ----" + returnedDistance2);
-                                                                    returnedDistance3 = consDistList.get(consDistList.size() - 3);
-                                                                   // Log.e("APP DATA ", " Distance 3 ----" + returnedDistance3);
-                                                                }
-
-                                                                //If 3-consective perpendicular distances are more than buffer distance
-                                                                if (returnedDistance1 > routeDeviationDistance && returnedDistance2 > routeDeviationDistance && returnedDistance3 > routeDeviationDistance) {
-                                                                             Log.e("APP DATA ", " Distance 1 ----" + returnedDistance1);
-                                                                             Log.e("APP DATA ", " Distance 2 ----" + returnedDistance2);
-                                                                             Log.e("APP DATA ", " Distance 3 ----" + returnedDistance3);
-                                                                             Log.e("APP DATA ", " currentGpsPosition ----" + currentGpsPosition);
-
-                                                                          //  verifyRouteDeviation(OldGPSPosition, currentGpsPosition, DestinationNode, routeDeviationDistance, null);
-
-                                                                } else {
-
-                                                                }
-
-                                                               */
-
+                                                                //*****************************************
+                                                                //If vehicle reaches destination
                                                                 AlertDestination(currentGpsPosition);
+                                                                //*****************************************
+
                                                                 if (bearing > 0.0) {
                                                                     CameraPosition currentPlace = new CameraPosition.Builder()
                                                                             .target(shadowTgt)
@@ -757,17 +738,25 @@ import static java.lang.Math.sin;
                                                                 } else {
 
                                                                 }
-                                                            } else if (islocationControlEnabled == true) {
+
+                                                            } else {
                                                                 animateCarMoveNotUpdateMarker(mPositionMarker, OldNearestPosition, nPosition, 1000);
                                                             }
+
 
 
                                                         }
                                                     }
 
                                                 }
-                                               else{ //if the perpendicular distane is more than 40
-                                                    isContinuoslyOutOfTrack=true;
+                                               else{ //if the perpendicular distane is more than 40 (i.e. vehicle deviated the route)
+
+                                                  //  Log.e("DEVIATION DISTANCE:", "DEVIATION DISTANCE:" + distance_movement);
+                                                    //isContinuoslyOutOfTrack=true;
+
+                                                    isContinuoslyOutOfTrack=false;
+
+                                                    //Add first time
                                                     if (mPositionMarker == null) {
 
                                                         mPositionMarker = mMap.addMarker(new MarkerOptions()
@@ -778,38 +767,60 @@ import static java.lang.Math.sin;
                                                                 .icon(bitmapDescriptorFromVector(getContext(), R.drawable.gps_transperent_98)));
 
 
-                                                    } else {
+                                                    } else { //update marker position
+
+                                                        //Check three consecutive deviations to hit the API to get new route
+                                                        double returnedDistance1 = 0.0;
+                                                        double returnedDistance2 = 0.0;
+                                                        double returnedDistance3 = 0.0;
+                                                        if (consDistList != null && consDistList.size() > 2) {
+                                                            returnedDistance1 = consDistList.get(consDistList.size() - 1);
+                                                            //Log.e("APP DATA ", " Deviation Distance 1 ----" + returnedDistance1);
+                                                            returnedDistance2 = consDistList.get(consDistList.size() - 2);
+                                                            //Log.e("APP DATA ", "Deviation Distance 2 ----" + returnedDistance2);
+                                                            returnedDistance3 = consDistList.get(consDistList.size() - 3);
+                                                            //Log.e("APP DATA ", "Deviation Distance 3 ----" + returnedDistance3);
+                                                        }
+
+                                                        //Get the deviated Route
+                                                        if (returnedDistance1 > routeDeviationDistance && returnedDistance2 > routeDeviationDistance && returnedDistance3 > routeDeviationDistance) {
+                                                           // Log.e("APP DATA ", "Route Deviated ----" + "YES.....");
+                                                          //  Log.e("APP DATA ", " Deviation Distance 1 ----" + returnedDistance1);
+                                                          //  Log.e("APP DATA ", " Deviation Distance 2 ----" + returnedDistance2);
+                                                          //  Log.e("APP DATA ", " Deviation Distance 3 ----" + returnedDistance3);
+
+                                                           // Log.e("APP DATA ", " OLD GPS ----" + OldGPSPosition);
+                                                            Log.e("APP DATA ", " CGPS----" + currentGpsPosition );
+                                                          //  Log.e("APP DATA ", " Per.OLD GPS----" + OldNearestPosition);
+                                                            Log.e("APP DATA ", " Per.CGPS GPS-----" + nPosition);
+                                                            verifyRouteDeviation(OldGPSPosition, currentGpsPosition, DestinationNode, routeDeviationDistance, null);
+
+
+                                                            //Hit API to get route and plot
+                                                        }
+
+                                                        //Update marker position and Animate marker and camera
                                                         animateCarMove(mPositionMarker, OldGPSPosition, currentGPSPosition, 1000);
+                                                       // Log.e("APP DATA ", "Marker Animated ----" + "YES.....");
+
                                                         CameraPosition currentPlace = new CameraPosition.Builder()
                                                                 .target(currentGPSPosition)
                                                                 .tilt(65.5f).zoom(18)
                                                                 .build();
                                                         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(currentPlace), 1000, null);
-                                                        double returnedDistance1 = 0.0;
-                                                        double returnedDistance2 = 0.0;
-                                                        double returnedDistance3 = 0.0;
-                                                        animateCarMove(mPositionMarker, OldGPSPosition, currentGPSPosition, 1000);
-                                                        if (consDistList != null) {
+                                                       // Log.e("APP DATA ", "Camera Animated ----" + "YES.....");
 
-                                                            returnedDistance1 = consDistList.get(consDistList.size() - 1);
-                                                            //Log.e("APP DATA ", " Distance 1 ----" + returnedDistance1);
-                                                            returnedDistance2 = consDistList.get(consDistList.size() - 2);
-                                                           // Log.e("APP DATA ", " Distance 2 ----" + returnedDistance2);
-                                                            returnedDistance3 = consDistList.get(consDistList.size() - 3);
-                                                           // Log.e("APP DATA ", " Distance 3 ----" + returnedDistance3);
-                                                        }
-
-                                                        if (returnedDistance1 > routeDeviationDistance && returnedDistance2 > routeDeviationDistance && returnedDistance3 > routeDeviationDistance) {
+                                                        /*if (returnedDistance1 > routeDeviationDistance && returnedDistance2 > routeDeviationDistance && returnedDistance3 > routeDeviationDistance) {
                                                                  Log.e("APP DATA ", " Distance 1 ----" + returnedDistance1);
                                                                  Log.e("APP DATA ", " Distance 2 ----" + returnedDistance2);
                                                                  Log.e("APP DATA ", " Distance 3 ----" + returnedDistance3);
                                                                  Log.e("APP DATA ", " currentGpsPosition ----" + currentGpsPosition);
-                                                                 verifyRouteDeviation(OldGPSPosition, currentGpsPosition, DestinationNode, routeDeviationDistance, null);
+                                                                 //verifyRouteDeviation(OldGPSPosition, currentGpsPosition, DestinationNode, routeDeviationDistance, null);
 
 
                                                         } else {
 
-                                                        }
+                                                        }*/
 
                                                      /*   if(isContinuoslyOutOfTrack==true){
                                                             currentLocationList.add(currentGpsPosition);
@@ -831,7 +842,7 @@ import static java.lang.Math.sin;
                                             }
 
                                          }
-                                    } else {
+                                    } else { //follow the deviated route, update marker and animate map
                                         if(OldGPSPosition!=null && currentGpsPosition!=null ) {
                                             double distance = distFrom(OldGPSPosition.latitude, OldGPSPosition.longitude, currentGpsPosition.latitude, currentGpsPosition.longitude);
                                             //  Log.e("distance", "distance" + distance);
@@ -1970,16 +1981,20 @@ import static java.lang.Math.sin;
 
         }
      public void AlertDestination(LatLng currentGpsPosition) {
+
          //  int GpsIndex=OldNearestGpsList.indexOf(nearestPositionPoint);
-         drawMarkerWithCircle(DestinationNode, routeDeviationDistance);
-         double distanceAtLast = distFrom(currentGpsPosition.latitude, currentGpsPosition.longitude, mCircle.getCenter().latitude, mCircle.getCenter().longitude);
-         Log.e("LAST DISTANCE"," LAST DISTANCE @@@@@@@@@@@@@@@@@@@@ "+ distanceAtLast);
+         //drawMarkerWithCircle(DestinationNode, routeDeviationDistance);
+         //double distanceAtLast = distFrom(currentGpsPosition.latitude, currentGpsPosition.longitude, mCircle.getCenter().latitude, mCircle.getCenter().longitude);
+         //Log.e("LAST DISTANCE"," LAST DISTANCE @@@@@@@@@@@@@@@@@@@@ "+ distanceAtLast);
          // Log.e("LAST DISTANCE"," DestinationGeoFenceCordinatesList @@@@@@@@@@@@@@@@@@@@ "+ DestinationGeoFenceCordinatesList.size());
          // if(distanceAtLast<mCircle.getRadius()){
-         if (DestinationGeoFenceCordinatesList != null && DestinationGeoFenceCordinatesList.size() > 1) {
-             PolygonOptions polygonOptions = new PolygonOptions().addAll(DestinationGeoFenceCordinatesList);
-             mMap.addPolygon(polygonOptions);
-             polygonOptions.fillColor(Color.CYAN);
+
+         //
+         if (DestinationGeoFenceCordinatesList != null && DestinationGeoFenceCordinatesList.size() > 2) {
+             //PolygonOptions polygonOptions = new PolygonOptions().addAll(DestinationGeoFenceCordinatesList);
+             //mMap.addPolygon(polygonOptions);
+             //polygonOptions.fillColor(Color.CYAN);
+             isLieInGeofence = false;
              isLieInGeofence = DestinationPolygonGeofence(currentGpsPosition, DestinationGeoFenceCordinatesList);
              Log.e("Destination Geofence", "Destination Geofence : " + isLieInGeofence);
              if (getActivity() != null) {
@@ -1997,13 +2012,13 @@ import static java.lang.Math.sin;
                          Log.e("AlertDestination", "Alert Destination" + "DESTINATION REACHED--");
                          isAlertShown = true;
                      }else{
-                         Log.e("AlertDestination", "Alert Destination" + "DESTINATION NOT REACHED--");
+                         //Log.e("AlertDestination", "Alert Destination" + "DESTINATION NOT REACHED--");
                      }
                  } else {
 
                  }
              }
-         }
+         } //end of If
      }
 
      /*
