@@ -1480,6 +1480,7 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
                                 // remove duplicate (end to start) points in line segments
                                 removeDuplicatesRouteDeviated(RouteDeviationPointsForComparision);
                                 // List<LatLng> EdgeWithoutDuplicatesInRouteDeviationPoints = removeDuplicatesRouteDeviated(RouteDeviationPointsForComparision);
+                                Log.e("DESTINATION POSITION","DESTINATION POSITION"+ DestinationNode);
                                 if (EdgeWithoutDuplicates != null &&
                                         RouteDeviationPointsForComparision != null) {
                                     Log.e("ROUTE DEV MKR UPDATE", "BEFORE VERIFICATION OF OLD AND NEW ROUTE");
@@ -1694,7 +1695,7 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
             }
             if (innerFlag == false){
                 new_unCommonPoints.add(new LatLng(deviatedRoutePoint.longitude, deviatedRoutePoint.latitude));
-                new_unCommonPoints.add(DestinationPosition);
+                new_unCommonPoints.add(DestinationNode);
                 Log.e("DESTINATION POSITION","DESTINATION POSITION"+ DestinationNode);
             }
 
