@@ -1492,7 +1492,7 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
                                     Log.e("ROUTE DEV MKR UPDATE", "BEFORE PLOTTING DEVIATED ROUTE");
 
                                     Log.e("ROUTE DEV MKR UPDATE", "BEFORE PLOTTING DEVIATED ROUTE, UNCOMMON POINTS SIZE:" + new_unCommonPoints.size());
-
+                                    boolean routeDeviatedMessageAlert=false;
                                     if (new_unCommonPoints.size() > 1) {
                                         //  Log.e("Route Deviation", " IS ROUTE VERIFY  ###### " + " Route COINSIDENCE");
                                         new_unCommonPoints.add(0,RouteDeviatedSourcePosition);
@@ -1507,6 +1507,7 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
                                             mMap.addPolyline(polylineOptions);
                                             polyline.setJointType(JointType.ROUND);
                                             Log.e("ROUTE DEV MKR UPDATE", "DEVIATED ROUTE PLOTTED");
+                                            routeDeviatedMessageAlert = true;
                                         }
 
                                         LatLng markerPosition = mPositionMarker.getPosition();
@@ -1536,6 +1537,26 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
                                         drawMarkerWithCircle(RouteDeviation_RouteSt_point, 40);
                                         double rd_ditance = distFrom(RouteDeviation_RouteSt_point.latitude, RouteDeviation_RouteSt_point.longitude, markerPosition.latitude, markerPosition.longitude);
                                         Log.e("Route Deviation", "RouteDeviation_RouteSt_point Distance Buffer" + rd_ditance);
+
+                                            if(routeDeviatedMessageAlert==true){
+                                                LayoutInflater inflater1 = getActivity().getLayoutInflater();
+                                                @SuppressLint("WrongViewCast") View layout = inflater1.inflate(R.layout.custom_toast, (ViewGroup) getActivity().findViewById(R.id.textView_toast));
+                                                TextView text = (TextView) layout.findViewById(R.id.textView_toast);
+                                                text.setText("Route Deviated");
+                                                Toast toast = new Toast(getActivity().getApplicationContext());
+                                                toast.setDuration(Toast.LENGTH_LONG);
+                                                toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+                                                toast.setGravity(Gravity.TOP, 0, 150);
+                                                toast.setView(layout);
+                                                toast.show();
+                                                StringBuilder routeDeviatedAlert = new StringBuilder();
+                                                routeDeviatedAlert.append("ROUTE DEVIATED" + " RouteDeviatedSourcePosition : " + RouteDeviatedSourcePosition);
+                                                sendData(MapEvents.ALERTVALUE_3, MapEvents.ALERTTYPE_3);
+                                                Log.e("Route Deviation", " Route Deviation Alert POSTED" + MapEvents.ALERTVALUE_3);
+                                                routeDeviatedMessageAlert=false;
+                                            }else{
+
+                                            }
                                         if (rd_ditance < 80) {
                                             // if deviation happens with in 40 mts distance it will identify Route Deviation
                                             Log.e("ROUTE DEV MKR UPDATE", "ROAD DISTANCE LESS THAN 80MTS CONDITION" + currentGpsPoint + "," + nPosition + "," + rd_ditance);
@@ -1556,20 +1577,7 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
                                                     //      Log.e("Route Deviation", " Inside Route Deviation Distance " + routeDeviated_distance_3);
                                                     isRouteDeviated = true;
                                                     isContinuoslyOutOfTrack = true;
-                                                    LayoutInflater inflater1 = getActivity().getLayoutInflater();
-                                                    @SuppressLint("WrongViewCast") View layout = inflater1.inflate(R.layout.custom_toast, (ViewGroup) getActivity().findViewById(R.id.textView_toast));
-                                                    TextView text = (TextView) layout.findViewById(R.id.textView_toast);
-                                                    text.setText("Route Deviated");
-                                                    Toast toast = new Toast(getActivity().getApplicationContext());
-                                                    toast.setDuration(Toast.LENGTH_LONG);
-                                                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
-                                                    toast.setGravity(Gravity.TOP, 0, 150);
-                                                    toast.setView(layout);
-                                                    toast.show();
-                                                    StringBuilder routeDeviatedAlert = new StringBuilder();
-                                                    routeDeviatedAlert.append("ROUTE DEVIATED" + " RouteDeviatedSourcePosition : " + RouteDeviatedSourcePosition);
-                                                    sendData(MapEvents.ALERTVALUE_3, MapEvents.ALERTTYPE_3);
-                                                    Log.e("Route Deviation", " Route Deviation Alert POSTED" + MapEvents.ALERTVALUE_3);
+
                                                     //  }
                                                     //  }
                                                 }
