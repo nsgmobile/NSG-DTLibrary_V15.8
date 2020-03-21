@@ -1440,7 +1440,7 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
                 final String destPoint = destLongiPos.concat(" ").concat(destLatPos);
 
                 RouteDeviatedSourcePosition = new LatLng(Double.parseDouble(cgpsLat), Double.parseDouble(cgpsLongi));
-                // Log.e("Route Deviation", "routeDiation SOURCE Position  ###### " + RouteDeviatedSourcePosition);
+                 Log.e("Route Deviation", "routeDiation SOURCE Position  ###### " + RouteDeviatedSourcePosition);
                 // Log.e("returnedDistance", "RouteDiationPosition  ###### " + routeDiationPosition);
                 //   Log.e("returnedDistance", "Destination Position --------- " + destPoint);
                 //  DestinationPosition = new LatLng(destLat, destLng);
@@ -1495,6 +1495,7 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
 
                                     if (new_unCommonPoints.size() > 1) {
                                         //  Log.e("Route Deviation", " IS ROUTE VERIFY  ###### " + " Route COINSIDENCE");
+                                        new_unCommonPoints.add(0,RouteDeviatedSourcePosition);
                                         new_unCommonPoints.add(DestinationNode);
                                         //Ploting uncommon points as a line here
                                         if (mPositionMarker != null && mPositionMarker.isVisible() == true) {
