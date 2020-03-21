@@ -1495,7 +1495,7 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
 
                                     if (new_unCommonPoints.size() > 1) {
                                         //  Log.e("Route Deviation", " IS ROUTE VERIFY  ###### " + " Route COINSIDENCE");
-
+                                        new_unCommonPoints.add(DestinationNode);
                                         //Ploting uncommon points as a line here
                                         if (mPositionMarker != null && mPositionMarker.isVisible() == true) {
                                             PolylineOptions polylineOptions = new PolylineOptions();
@@ -1714,7 +1714,7 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
 //            new_unCommonPoints.add(commonData1);
 //            new_unCommonPoints.removeAll(commonPoints);
         }
-        new_unCommonPoints.add(DestinationNode);
+        Log.e("COMMON AND UNCOMMON","SIZES, common:"+ commonPoints.size() + "Uncommon" + new_unCommonPoints.size());
 
             /*
          boolean isEqual = EdgeWithoutDuplicatesInRouteDeviationPoints.retainAll(edgeWithoutDuplicates);
