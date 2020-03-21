@@ -1695,7 +1695,7 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
             }
             if (innerFlag == false){
                 new_unCommonPoints.add(new LatLng(deviatedRoutePoint.longitude, deviatedRoutePoint.latitude));
-                new_unCommonPoints.add(DestinationNode);
+                //new_unCommonPoints.add(DestinationNode);
                 Log.e("DESTINATION POSITION","DESTINATION POSITION"+ DestinationNode);
             }
 
@@ -1714,6 +1714,8 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
 //            new_unCommonPoints.add(commonData1);
 //            new_unCommonPoints.removeAll(commonPoints);
         }
+        new_unCommonPoints.add(DestinationNode);
+        
             /*
          boolean isEqual = EdgeWithoutDuplicatesInRouteDeviationPoints.retainAll(edgeWithoutDuplicates);
          Log.e("Route Deviation"," List Retains FLAG" +isEqual);
