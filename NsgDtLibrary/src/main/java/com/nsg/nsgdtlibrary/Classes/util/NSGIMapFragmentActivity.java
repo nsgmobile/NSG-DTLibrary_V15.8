@@ -820,12 +820,38 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
                                                     //Update marker position and Animate marker and camera
                                                     animateCarMove(mPositionMarker, OldGPSPosition, currentGPSPosition, 1000);
                                                     // Log.e("APP DATA ", "Marker Animated ----" + "YES.....");
-
+                                                    /*
                                                     CameraPosition currentPlace = new CameraPosition.Builder()
                                                             .target(currentGPSPosition)
                                                             .tilt(65.5f).zoom(18)
                                                             .build();
                                                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(currentPlace), 1000, null);
+                                                   */
+                                                    float bearing = (float) bearingBetweenLocations(OldGPSPosition, currentGpsPosition);
+                                                    // Log.e("BEARING", "BEARING @@@@@@@ " + bearing);
+                                                    int height = 0;
+                                                    if (getView() != null) {
+                                                        height = getView().getMeasuredHeight();
+                                                    }
+                                                    Projection p = mMap.getProjection();
+                                                    Point bottomRightPoint = p.toScreenLocation(p.getVisibleRegion().nearRight);
+                                                    Point center = new Point(bottomRightPoint.x / 2, bottomRightPoint.y / 2);
+                                                    Point offset = new Point(center.x, (center.y + (height / 4)));
+                                                    LatLng centerLoc = p.fromScreenLocation(center);
+                                                    LatLng offsetNewLoc = p.fromScreenLocation(offset);
+                                                    double offsetDistance = SphericalUtil.computeDistanceBetween(centerLoc, offsetNewLoc);
+                                                    LatLng shadowTgt = SphericalUtil.computeOffset(currentGpsPosition, offsetDistance, bearing);
+
+                                                    CameraPosition currentPlace_deviated = new CameraPosition.Builder()
+                                                            .target(shadowTgt)
+                                                            .bearing(bearing).tilt(65.5f).zoom(18)
+                                                            .build();
+                                                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(currentPlace_deviated), 1000, null);
+
+
+
+
+
                                                     // Log.e("APP DATA ", "Camera Animated ----" + "YES.....");
 
                                                         /*if (returnedDistance1 > routeDeviationDistance && returnedDistance2 > routeDeviationDistance && returnedDistance3 > routeDeviationDistance) {
@@ -1460,13 +1486,13 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
                                     checkPointsOfExistingRoutewithNewRoute(EdgeWithoutDuplicates, RouteDeviationPointsForComparision);
 
                                       Log.e("List Verification", "List Verification commonPoints --  DATA " + commonPoints.size());
-                                    //  Log.e("List Verification", "List Verification  new_unCommonPoints -- DATA " + new_unCommonPoints.size());
+                                      Log.e("List Verification", "List Verification  new_unCommonPoints -- DATA " + new_unCommonPoints.size());
 
                                     Log.e("ROUTE DEV MKR UPDATE", "BEFORE PLOTTING DEVIATED ROUTE");
 
                                     Log.e("ROUTE DEV MKR UPDATE", "BEFORE PLOTTING DEVIATED ROUTE, UNCOMMON POINTS SIZE:" + new_unCommonPoints.size());
 
-                                    if (commonPoints.size() > 0 && new_unCommonPoints.size() > 1) {
+                                    if (new_unCommonPoints.size() > 1) {
                                         //  Log.e("Route Deviation", " IS ROUTE VERIFY  ###### " + " Route COINSIDENCE");
 
                                         //Ploting uncommon points as a line here
@@ -1647,7 +1673,7 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
                 String oldLng = String.valueOf(truncateDecimal(oldRoutePoint.longitude, 8));
                 Log.e("DEVIATION COMPARISION","DEVIATION COMPARISION OLD TRUNCATED "+newLat +","+newLng);
                 if(newLat.equals(oldLat) && newLng.equals(oldLng)) {
-                    commonPoints.add(oldRoutePoint);
+                    commonPoints.add(new LatLng(oldRoutePoint.longitude, oldRoutePoint.latitude));
                     innerFlag = true;
                 }
 
@@ -1667,7 +1693,9 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
 
             }
             if (innerFlag == false){
-                new_unCommonPoints.add(deviatedRoutePoint);
+                new_unCommonPoints.add(new LatLng(deviatedRoutePoint.longitude, deviatedRoutePoint.latitude));
+                new_unCommonPoints.add(DestinationPosition);
+                Log.e("DESTINATION POSITION","DESTINATION POSITION"+ DestinationNode);
             }
 
 
@@ -1693,6 +1721,8 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
         // boolean isEqual = edgeWithoutDuplicates.equals(RouteDeviationConvertedPoints);      //false
          System.out.println(isEqual);
          */
+
+        //Log.e("DEVIATION COMPARISION","DEVIATION COMPARISION OLD TRUNCATED "+newLat +","+newLng);
 
     }
 
