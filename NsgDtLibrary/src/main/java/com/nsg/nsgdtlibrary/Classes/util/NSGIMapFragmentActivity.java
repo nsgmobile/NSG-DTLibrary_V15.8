@@ -255,8 +255,8 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
     private boolean isGPS = false;
     private String GeoFenceCordinates;
     private boolean routeAPIHit = false;
-    List<LatLng> commonPoints;
-    List<LatLng> new_unCommonPoints;
+    List<LatLng> commonPoints= new ArrayList<LatLng>();
+    List<LatLng> new_unCommonPoints=new ArrayList<LatLng>();
 
     //Surya
     private boolean isFirstTime = true;
@@ -1642,9 +1642,9 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
 //        for (int k = 0; k < edgeWithoutDuplicates.size(); k++) {
 //            //  Log.e("Route Deviated----", "edgeWithoutDuplicates ------- " + edgeWithoutDuplicates.get(k));
 //        }
-        commonPoints = new ArrayList<LatLng>();
+        commonPoints.clear();
         // commonPoints.clear();
-        new_unCommonPoints = new ArrayList<LatLng>();
+        new_unCommonPoints.clear();
         // new_unCommonPoints.clear();
         String elementOfList1 = "";
         String elementOfList2 = "";
@@ -1715,7 +1715,7 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
 //            new_unCommonPoints.removeAll(commonPoints);
         }
         new_unCommonPoints.add(DestinationNode);
-        
+
             /*
          boolean isEqual = EdgeWithoutDuplicatesInRouteDeviationPoints.retainAll(edgeWithoutDuplicates);
          Log.e("Route Deviation"," List Retains FLAG" +isEqual);
