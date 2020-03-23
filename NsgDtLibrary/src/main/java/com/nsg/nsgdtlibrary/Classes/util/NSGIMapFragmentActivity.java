@@ -621,7 +621,7 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
                                 // surajit changed
                                 // currentGpsPosition = getLocation();
                                 // updating the currentGpsPosition variable to vurrent gps position
-                                getLocation();
+                                currentGpsPosition = getLocation();
 
                                 //Draw circle at current GPS with buffer configured value
                                 //ACTION - CHANGES TO BE DONE
@@ -657,9 +657,11 @@ public class NSGIMapFragmentActivity extends Fragment implements View.OnClickLis
 
                                             //currentPerpendicularPoint means nearest point on road
                                             // currentPerpendicularPoint = GetNearestPointOnRoadFromGPS(OldGPSPosition, currentGpsPosition);
+
+
                                             currentPerpendicularPoint = findNearestPointOnLine(removeDuplicates(edgeDataPointsList), currentGpsPosition);
 
-                                            // Log.e("CurrentGpsPoint", " Nearest GpsPoint" + currentPerpendicularPoint);
+                                             Log.e("CurrentGpsPoint", " Nearest GpsPoint" + currentPerpendicularPoint);
 
 
                                             //Get the perpendicular distance from GPS to Road
