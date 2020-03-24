@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
-import android.sax.StartElementListener;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,9 +11,6 @@ import android.widget.TextView;
 
 
 //import com.nsg.nsgdtlibrary.Classes.OldCode.NSGIMainFragment;
-import com.nsg.nsgdtlibrary.Classes.util.NSGIMapFragmentActivity;
-import com.nsg.nsgdtlibrary.Classes.util.NSGINavigationFragment;
-import com.nsg.nsgdtlibrary.Classes.util.NavigationProperties;
 
 import java.io.File;
 
